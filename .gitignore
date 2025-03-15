@@ -1,0 +1,4 @@
+.sln
+src/.vscode
+src/*/bin
+src/*/obj

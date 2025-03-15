@@ -1,0 +1,114 @@
+
+volumes:
+  orderdb_data:
+  productdb_data:
+
+networks: 
+  app-network:
+    driver: bridge  
+
+services:
+  orderapi:
+    container_name: orderapi
+    build:
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+      context: .
+      dockerfile: src/OrderAPI/Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ConnectionStrings__OrderDefaultConnection=Host=orderdb;Port=5432;Database=orderDB;Username=postgres;Password=postgres
+      - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
+    depends_on:
+      - kafka
+      - orderdb
+    networks:
+      - app-network
+  productapi:
+    container_name: productapi
+    build:
+      args:
+        BUILDKIT_INLINE_CACHE: "1"
+      context: .
+      dockerfile: src/ProductAPI/Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
+    depends_on:
+      - kafka
+      - productdb
+    networks:
+      - app-network
+
+  orderdb:
+    image: postgres:latest
+    container_name: orderdb
+    ports:
+      - "5499:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=orderDB
+    volumes:
+      - orderdb_data:/var/lib/postgresql/data
+    networks: 
+      - app-network
+
+  productdb:
+    image: postgres:latest
+    container_name: productdb
+    ports:
+      - "5500:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=productDB
+    volumes:
+      - productdb_data:/var/lib/postgresql/data
+    networks: 
+      - app-network
+        
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks: 
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: 5000
+      KAFKA_BROKER_ID: 1
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+    networks: 
+      - app-network
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    depends_on:
+      - kafka
+    ports:
+      - 9000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+    networks: 
+      - app-network
+
