@@ -7,3 +7,4 @@ global using Application.Interfaces;
 global using Application.Kafka.Messages;
 global using KafkaConsumer;
 global using OrderProcessingService;
+global using Microsoft.Extensions.Configuration;

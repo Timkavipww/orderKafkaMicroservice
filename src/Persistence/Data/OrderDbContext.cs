@@ -1,5 +1,3 @@
-using Domain;
-
 namespace Persistence.Data;
 
 public class OrderDbContext : DbContext

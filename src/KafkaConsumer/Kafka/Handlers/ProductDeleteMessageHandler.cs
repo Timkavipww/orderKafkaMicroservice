@@ -1,6 +1,3 @@
-
-using Microsoft.Extensions.DependencyInjection;
-
 namespace KafkaConsumer.Kafka.Handlers;
 
 public class ProductDeleteMessageHandler : IMessageHandler<DeleteProductMessage>

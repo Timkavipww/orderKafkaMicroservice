@@ -13,6 +13,7 @@ builder.AddData();
 builder.AddServices();
 builder.AddKafkaSupport();
 
+
 var app = builder.Build();
 await app.ApplyMigrations();
 

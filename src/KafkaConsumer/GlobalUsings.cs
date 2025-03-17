@@ -8,6 +8,5 @@ global using System.Text.Json;
 global using KafkaConsumer.Kafka.Serializers;
 global using Application.Interfaces;
 global using Application.Kafka.Messages;
-global using KafkaConsumer.Kafka;
-global using KafkaConsumer.Kafka.Handlers;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Configuration;
