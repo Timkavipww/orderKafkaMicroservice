@@ -1,10 +1,9 @@
 global using Microsoft.EntityFrameworkCore;
 global using OrderAPI.Extensions;
-global using OrderAPI.Services;
 global using Persistence.Data;
-global using Domain;
 global using Microsoft.AspNetCore.Mvc;
 global using System.Net;
 global using Application.Interfaces;
 global using Application.Kafka.Messages;
-global using Confluent.Kafka;
+global using KafkaConsumer;
+global using OrderProcessingService;

@@ -23,5 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KafkaConsumer\KafkaConsumer.csproj" />
+    <ProjectReference Include="..\OrderProcessingService\OrderProcessingService.csproj" />
   </ItemGroup>
 </Project>

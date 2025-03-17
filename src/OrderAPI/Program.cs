@@ -1,5 +1,3 @@
-using KafkaConsumer;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
@@ -11,28 +9,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ProductDbContext>(options => 
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ProductDefaultConnection"));
-});
-builder.Services.AddDbContext<OrderDbContext>(options => 
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderDefaultConnection"));
-});
-
-builder.Services.AddScoped<IOrderService, OrderService>();
-
-
+builder.AddData();
+builder.AddServices();
 builder.AddKafkaSupport();
+
 var app = builder.Build();
 await app.ApplyMigrations();
 
 
 app.UseSwagger();
 app.UseSwaggerUI();
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-// app.UseAuthorization();
+app.UseAuthorization();
 
 app.UseRouting();
 app.MapControllers();
