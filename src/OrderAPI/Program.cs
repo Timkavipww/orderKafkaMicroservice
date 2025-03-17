@@ -1,19 +1,15 @@
-
-
-using System.Net;
-using OrderAPI.Kafka;
+using KafkaConsumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Listen(IPAddress.Any, 80);  // Слушаем на всех интерфейсах на порту 80
+    options.Listen(IPAddress.Any, 80);
 });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-
 
 builder.Services.AddDbContext<ProductDbContext>(options => 
 {
@@ -24,21 +20,10 @@ builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("OrderDefaultConnection"));
 });
 
-
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-var config = new ConsumerConfig
-{
-    BootstrapServers = "kafka:9092",
-    GroupId = "add-product-consumer-group",
-    AutoOffsetReset = AutoOffsetReset.Earliest,
-    AllowAutoCreateTopics = true
-};
-builder.Services.AddSingleton<IConsumer<Null, string>>(x => 
-    new ConsumerBuilder<Null,string>(config).Build());
 
-builder.Services.AddHostedService<OrderConsumer>();
-
+builder.AddKafkaSupport();
 var app = builder.Build();
 await app.ApplyMigrations();
 

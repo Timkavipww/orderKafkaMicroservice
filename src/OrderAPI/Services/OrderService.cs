@@ -1,23 +1,21 @@
-using System.Threading.Tasks;
-
 namespace OrderAPI.Services;
 
 public class OrderService
 (
     OrderDbContext _orderContext,
     ProductDbContext _productContext
+    // IProducer<string, CreateOrderMessage> _createOrderProducer
 ) : IOrderService
 {
-
-
-    public async Task AddOrder(CreateOrder order, CancellationToken cts)
+    public Task AddOrder(CreateOrderMessage order, CancellationToken cts)
     {
-        await _orderContext.Orders.AddAsync(new Order
+        var message = new Message<string, CreateOrderMessage>()
         {
-            ProductId = order.ProductId,
-            Quantity = order.Quantity
-        },cts);
-        await _orderContext.SaveChangesAsync();
+            Key = Guid.CreateVersion7().ToString(),
+            Value = order
+        };
+        // await _createOrderProducer.ProduceAsync(KafkaTopics.CREATEORDERTOPIC, message, cts);
+        return Task.CompletedTask;
     }
 
     public async Task<List<OrderSummary>> GetOrdersSummary()

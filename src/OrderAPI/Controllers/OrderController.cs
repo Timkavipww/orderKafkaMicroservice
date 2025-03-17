@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace OrderAPI.Controllers;
 
 [ApiController]
@@ -19,9 +17,8 @@ public class OrderController
     }
 
     [HttpPost("add")]
-    public IActionResult AddOrder(CreateOrder order, CancellationToken cts)
+    public IActionResult AddOrder(CreateOrderMessage order, CancellationToken cts)
     {
-
         _orderService.AddOrder(order, cts);
         return Ok($"Order created");
     }

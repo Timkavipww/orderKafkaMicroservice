@@ -1,0 +1,13 @@
+global using Confluent.Kafka;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using Persistence.Data;
+global using Domain;
+global using System.Text;
+global using System.Text.Json;
+global using KafkaConsumer.Kafka.Serializers;
+global using Application.Interfaces;
+global using Application.Kafka.Messages;
+global using KafkaConsumer.Kafka;
+global using KafkaConsumer.Kafka.Handlers;
+global using Microsoft.Extensions.DependencyInjection;

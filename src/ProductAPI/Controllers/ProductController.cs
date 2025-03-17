@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace ProductAPI.Controllers;
 
 [ApiController]
@@ -12,7 +10,7 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
     [HttpPost]
-    public async Task<IActionResult> AddProduct(CreateProductDTO product, CancellationToken cts)
+    public async Task<IActionResult> AddProduct(CreateProductMessage product, CancellationToken cts)
     {
         await _productService.Add(product, cts);
         return Created();
@@ -21,7 +19,7 @@ public class ProductController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteProduct(int id, CancellationToken cts)
     {
-        await _productService.Delete(id, cts);
+        await _productService.Delete(new DeleteProductMessage{Id = id}, cts);
         return NoContent();
     }
 }

@@ -1,47 +1,38 @@
 namespace ProductAPI.Services;
 
-
-public class ProductService
-(
-    IProducer<Null, string> _producer,
-    ProductDbContext _context
-) : IProductService
+public class ProductService: IProductService
 {
+    
+    // private readonly IProducer<string, DeleteProductMessage> _deleteProductProducer;
+    private readonly IProducer<string, CreateProductMessage> _createProductProducer;
 
-    public async Task Add(CreateProductDTO product, CancellationToken cts)
+    public ProductService
+    (
+        // IProducer<string, DeleteProductMessage> deleteProductProducer,
+        IProducer<string, CreateProductMessage> createProductProducer
+
+    )
     {
-        var DTO = new Product
+        _createProductProducer = createProductProducer;
+        // _deleteProductProducer = deleteProductProducer;
+    }
+    public async Task Add(CreateProductMessage product, CancellationToken cts)
+    {
+        await _createProductProducer.ProduceAsync(KafkaTopics.ADDPRODUCTTOPIC, new Message<string, CreateProductMessage>
         {
-            Name = product.Name,
-            Price = product.Price
-        };
-
-        var result = await _producer.ProduceAsync(KafkaTopics.ADDPRODUCTTOPIC, 
-            new Message<Null, string>{ Value = JsonSerializer.Serialize(product) }, cts);
-        
-        if (result.Status != PersistenceStatus.Persisted)
-        {
-            var lastProduct = _context.Products.Last();
-            _context.Products.Remove(lastProduct);
-            await _context.SaveChangesAsync();
-        }
-        
-
-
+            Value = product,
+            Key = Guid.CreateVersion7().ToString()
+        });
     }
 
-    public async Task Delete(int id, CancellationToken cts)
+    public Task Delete(DeleteProductMessage message, CancellationToken cts)
     {
-        var product = _context.Products.FirstOrDefault(x => x.Id == id);
-        if(product is null)
-            throw new Exception("not found");
-
-        _context.Products.Remove(product!);
-        await _context.SaveChangesAsync();
-        await _producer.ProduceAsync(KafkaTopics.DELETEPRODUCTTOPIC, 
-        new Message<Null, string> {
-            Value = id.ToString()
-        },cts);
+        // await _deleteProductProducer.ProduceAsync(KafkaTopics.DELETEPRODUCTTOPIC, new Message<string, DeleteProductMessage>
+        // {
+        //     Value = message,
+        //     Key = Guid.CreateVersion7().ToString()
+        // });
+        return Task.CompletedTask;
     }
 
 }

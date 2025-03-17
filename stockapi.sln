@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Persistence\Persistence.csproj", "{0EF5B6B2-F9B8-425E-96DB-2A182B4484C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{0BED0C23-58E4-44D3-B362-668F9E89E6CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaConsumer", "src\KafkaConsumer\KafkaConsumer.csproj", "{17B45587-9BD8-4E1E-90F4-07D7FE0972D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,14 @@ Global
 		{0BED0C23-58E4-44D3-B362-668F9E89E6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BED0C23-58E4-44D3-B362-668F9E89E6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BED0C23-58E4-44D3-B362-668F9E89E6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{385F119C-A294-4393-8A30-5F4F2FBD6D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{385F119C-A294-4393-8A30-5F4F2FBD6D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{385F119C-A294-4393-8A30-5F4F2FBD6D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{385F119C-A294-4393-8A30-5F4F2FBD6D2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B45587-9BD8-4E1E-90F4-07D7FE0972D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B45587-9BD8-4E1E-90F4-07D7FE0972D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B45587-9BD8-4E1E-90F4-07D7FE0972D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B45587-9BD8-4E1E-90F4-07D7FE0972D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8A6DFA9B-156F-448F-9A90-BB6B120EF7BC} = {3593BE49-BCAB-49A6-8BAB-C0A4EED0FAA5}
@@ -55,5 +65,6 @@ Global
 		{CF2303DD-CFD8-4CAA-A722-8A93305C1D04} = {3593BE49-BCAB-49A6-8BAB-C0A4EED0FAA5}
 		{0EF5B6B2-F9B8-425E-96DB-2A182B4484C0} = {3593BE49-BCAB-49A6-8BAB-C0A4EED0FAA5}
 		{0BED0C23-58E4-44D3-B362-668F9E89E6CB} = {3593BE49-BCAB-49A6-8BAB-C0A4EED0FAA5}
+		{17B45587-9BD8-4E1E-90F4-07D7FE0972D5} = {3593BE49-BCAB-49A6-8BAB-C0A4EED0FAA5}
 	EndGlobalSection
 EndGlobal

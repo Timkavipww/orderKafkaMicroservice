@@ -11,12 +11,12 @@ services:
   orderapi:
     container_name: orderapi
     build:
-      args:
-        BUILDKIT_INLINE_CACHE: "1"
       context: .
       dockerfile: src/OrderAPI/Dockerfile
     ports:
       - "5002:80"
+    env_file:
+      - .env
     environment:
       - ConnectionStrings__OrderDefaultConnection=Host=orderdb;Port=5432;Database=orderDB;Username=postgres;Password=postgres
       - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
@@ -28,12 +28,12 @@ services:
   productapi:
     container_name: productapi
     build:
-      args:
-        BUILDKIT_INLINE_CACHE: "1"
       context: .
       dockerfile: src/ProductAPI/Dockerfile
     ports:
       - "5001:80"
+    env_file:
+      - .env
     environment:
       - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
     depends_on:

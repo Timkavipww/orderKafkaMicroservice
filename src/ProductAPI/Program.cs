@@ -1,4 +1,4 @@
-using System.Net;
+using KafkaConsumer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,22 +9,21 @@ builder.Services.AddSwaggerGen();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Listen(IPAddress.Any, 80);  // Слушаем на всех интерфейсах на порту 80
+    options.Listen(IPAddress.Any, 80);
 });
-
 builder.Services.AddDbContext<ProductDbContext>(options => 
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("ProductDefaultConnection"));
 });
+builder.Services.AddDbContext<OrderDbContext>(options => 
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("OrderDefaultConnection"));
+});
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
-var config = new ProducerConfig
-{
-    BootstrapServers = "kafka:9092"
-};
-builder.Services.AddSingleton<IProducer<Null, string>>
-    (x => new ProducerBuilder<Null, string>(config).Build());
+builder.AddKafkaSupport();
+
 
 var app = builder.Build();
 
@@ -39,6 +38,5 @@ app.UseSwaggerUI();
 
 app.UseRouting();
 app.MapControllers();
-
 
 app.Run();
