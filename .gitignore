@@ -2,3 +2,10 @@
 src/.vscode
 src/*/bin
 src/*/obj
+.env
+src/ProductAPI/Persistence
+src/ProductAPI/appsettings.Development.json
+src/OrderAPI/appsettings.Development.json
+
+
+

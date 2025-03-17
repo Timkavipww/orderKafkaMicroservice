@@ -18,8 +18,8 @@ services:
     env_file:
       - .env
     environment:
-      - ConnectionStrings__OrderDefaultConnection=Host=orderdb;Port=5432;Database=orderDB;Username=postgres;Password=postgres
-      - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
+      - ConnectionStrings__OrderDefaultConnection=${ORDER_DB_CONNECTION}
+      - ConnectionStrings__ProductDefaultConnection=${PRODUCT_DB_CONNECTION}
     depends_on:
       - kafka
       - orderdb
@@ -35,7 +35,8 @@ services:
     env_file:
       - .env
     environment:
-      - ConnectionStrings__ProductDefaultConnection=Host=productdb;Port=5432;Database=productDB;Username=postgres;Password=postgres
+      - ConnectionStrings__OrderDefaultConnection=${ORDER_DB_CONNECTION}
+      - ConnectionStrings__ProductDefaultConnection=${PRODUCT_DB_CONNECTION}
     depends_on:
       - kafka
       - productdb
