@@ -1,11 +1,11 @@
-
 volumes:
   orderdb_data:
   productdb_data:
 
-networks: 
+
+networks:
   app-network:
-    driver: bridge  
+    driver: bridge
 
 services:
   orderapi:
@@ -54,7 +54,7 @@ services:
       - POSTGRES_DB=orderDB
     volumes:
       - orderdb_data:/var/lib/postgresql/data
-    networks: 
+    networks:
       - app-network
 
   productdb:
@@ -68,37 +68,34 @@ services:
       - POSTGRES_DB=productDB
     volumes:
       - productdb_data:/var/lib/postgresql/data
-    networks: 
-      - app-network
-        
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    ports:
-      - 2181:2181
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks: 
+    networks:
       - app-network
 
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
-    depends_on:
-      - zookeeper
     ports:
-      - 9092:9092
+      - "9092:9092"
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: 5000
-      KAFKA_BROKER_ID: 1
-      KAFKA_MIN_INSYNC_REPLICAS: 1
-    networks: 
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    networks:
       - app-network
 
   kafdrop:
@@ -109,7 +106,6 @@ services:
     ports:
       - 9000:9000
     environment:
-      KAFKA_BROKERCONNECT: kafka:29092
-    networks: 
+      KAFKA_BROKERCONNECT: kafka:9092
+    networks:
       - app-network
-
